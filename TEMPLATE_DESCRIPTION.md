@@ -102,11 +102,11 @@ Run `docker compose up -d` to start all services. Builder will be available afte
 
 ## Official Pricing of Typebot (Typebot pricing)
 
-Typebot is open-source under AGPL 3.0 and completely free to self-host. There are no licensing fees, per-conversation charges, or feature restrictions in the self-hosted version. Typebot Cloud offers managed hosting for teams preferring not to manage infrastructure.
+Typebot is AGPL 3.0 licensed—free to self-host, no licensing fees, per-conversation charges, or feature restrictions. Typebot Cloud offers managed hosting for teams preferring not to manage infrastructure.
 
 ## Typebot cloud vs self hosted comparison (Pricing, features, costs, and more)
 
-The self-hosted version gives you full access to all features with no usage limits and complete data control. The cloud version removes infrastructure management but introduces per-message pricing and data residency outside your control.
+Self-hosting gives full access to all features with no usage limits and complete data control. The cloud version removes infrastructure management but introduces per-message pricing and outside data residency.
 
 ### Monthly cost of self hosting Typebot on Railway
 
