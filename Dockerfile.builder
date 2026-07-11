@@ -1,4 +1,4 @@
-FROM baptistearno/typebot-builder:latest
+FROM baptistearno/typebot-builder:3.17.2
 
 ENV PORT=3000
 ENV NODE_ENV=production
