@@ -63,7 +63,7 @@ Confirmed via live `curl` against each running service on 2026-07-24, not guesse
 | Variable | Value (currently set) | Mark Optional? | Description |
 |----------|------------------------|-----------------|-------------|
 | `MINIO_ROOT_USER` | `minioadmin` | No | MinIO admin username. |
-| `MINIO_ROOT_PASSWORD` | A fixed generated value (not `${{secret()}}`) | No | **Deliberately not using Railway's `${{secret()}}` syntax here** — during setup, a dynamic secret expression appeared to cause the resolved value to drift between what MinIO itself used and what dependent services referenced, producing a persistent "Access Key Id does not exist" error that only went away once this was pinned to one fixed literal value. If regenerating for a real published template, generate a real random value and set it as a literal string, not `${{secret(N)}}`. |
+| `MINIO_ROOT_PASSWORD` | `${{secret(24)}}` | No | Password for the MinIO admin account. Auto-generated fresh for each deployment. **Correction to an earlier version of this note:** during our own debugging, manually re-copying this value via CLI across several redeploys caused drift between what MinIO had and what other services referenced — that was an artifact of our manual process, not a real limitation of `${{secret()}}` itself. For the actual published template, `${{secret()}}` is correct and safer than a fixed literal — a fixed value would mean every single deployer of this template shares the exact same MinIO admin password, letting anyone log into anyone else's MinIO console. |
 | `PORT` | `9000` | No | **Required** — image-based services (no Dockerfile) have no way for Railway to know which port to route a public domain to without this being set explicitly. Without it, the public domain returns a `502` with an `x-railway-fallback: true` header, which looks like a generic platform error rather than an obvious missing-config problem. |
 
 **Custom Start Command (Settings → Deploy, not a variable):**
@@ -124,7 +124,7 @@ Same six Postgres variables this project always flags (see Postgres table above 
 - **`HOSTNAME=0.0.0.0` and `PORT=3000` must be set on both app services** — without these, healthchecks fail even though the app logs "Ready."
 - **`minio` must have `PORT=9000`** — without it, its public domain returns 502 regardless of whether the server itself is healthy.
 - **`S3_ENDPOINT` must be MinIO's public domain**, not its private/internal one — media needs to be servable to end users outside Railway's network, not just reachable by the app services.
-- Do **not** use `${{secret()}}` for `minio`'s `MINIO_ROOT_PASSWORD` — use a fixed generated literal (see MinIO section above for why).
+- Use `${{secret(24)}}` for `minio`'s `MINIO_ROOT_PASSWORD` in the published template (see MinIO section above — corrected from an earlier, wrong version of this note).
 
 ---
 
