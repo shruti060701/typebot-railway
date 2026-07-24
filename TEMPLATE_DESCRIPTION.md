@@ -15,11 +15,11 @@ Typebot is an open-source chatbot builder that lets you create conversational ex
 
 ## About Hosting Typebot open-source software on Railway (self hosted Typebot template)
 
-Self-hosting Typebot on Railway means your bot flows, user conversations, and customer data stay under your control forever. Railway manages infrastructure complexity—provisioning PostgreSQL for data, Redis for caching, and load balancing between builder and viewer services—while you focus on designing better conversational experiences. No vendor lock-in, no per-conversation fees, and full access to analytics.
+Self-hosting Typebot on Railway means your bot flows and customer data stay under your control forever. Railway manages infrastructure complexity—provisioning PostgreSQL and MinIO storage, and networking between builder and viewer—while you focus on designing better conversations. No vendor lock-in, no per-conversation fees.
 
 ## Why Deploy Typebot, the Intercom alternative on Railway (Railway Free Trial)
 
-Typebot delivers the conversational AI features of Intercom and Drift for zero licensing cost. You pay only for compute and storage on Railway. New users get a $5 free trial, which covers a fully-featured Typebot instance for weeks of testing and small-scale production use without any upfront cost.
+Typebot delivers the conversational AI features of Intercom and Drift for zero licensing cost. You pay only for compute and storage on Railway. New users get a $5 free trial, covering a fully-featured Typebot instance for weeks of testing and small-scale production use.
 
 Railway is a singular platform to deploy your infrastructure stack. Railway will host your infrastructure so you don't have to deal with configuration, while allowing you to vertically and horizontally scale it.
 
@@ -29,7 +29,7 @@ Railway is a singular platform to deploy your infrastructure stack. Railway will
 | ----------------- | ----------------------------------- | ---------------------------------------- |
 | **DigitalOcean**  | Instant multi-service setup, built-in secrets, automatic SSL, zero-config networking | Manual Docker Compose, manual Nginx, self-managed SSL certificates, complex networking |
 | **AWS**           | Simple service discovery, one-click database provisioning, instant public domains | Complex EC2, RDS, ElastiCache configuration with IAM overhead |
-| **Hetzner**       | One-click template deploy with Postgres and Redis auto-provisioned | Raw VPS requiring manual OS setup, Docker installation, and Compose orchestration |
+| **Hetzner**       | One-click deploy with Postgres and MinIO auto-provisioned | Raw VPS requiring manual OS setup, Docker installation, and Compose orchestration |
 
 ## Common Use Cases for hosted Typebot
 
@@ -43,27 +43,28 @@ Railway is a singular platform to deploy your infrastructure stack. Railway will
 
 ## Dependencies for Typebot Docker hosted on Railway
 
-Typebot is built as a Next.js application requiring PostgreSQL for persistent bot data, user accounts, and conversation history, and Redis for session management and real-time updates. Official Docker images include both the visual builder interface and a lightweight viewer service that renders published bots. Services communicate via private networking.
+Typebot is built as a Next.js application requiring PostgreSQL for persistent bot data, user accounts, and conversation history, and MinIO (S3-compatible) storage for media uploaded during bot conversations. Official Docker images include both the visual builder and a lightweight viewer that renders published bots. Services communicate via private networking.
 
 ### Deployment Dependencies for Managed Typebot Service (OSS Chatbot Platform)
 
-The Railway template provisions three core services automatically: the Typebot builder on port 3000 for designing bots, PostgreSQL for all data persistence, and Redis for caching and session management. Both builder and viewer services share the same database and communicate over private networking.
+The Railway template provisions the builder and viewer on port 3000 each, PostgreSQL for all data persistence, and MinIO (S3-compatible storage) for media uploaded in bot conversations. Builder and viewer share the same database and communicate over private networking.
 
 ### Implementation Details for Typebot (Using Typebot official docker images)
 
-The template deploys `baptistearno/typebot-builder:3.17.2` for the visual editor and `baptistearno/typebot-viewer:3.17.2` for bot rendering. Postgres and Redis connections are auto-configured via environment variables. The builder initializes the database schema on first startup. Healthchecks verify service availability with a 120-second timeout to accommodate initial migrations.
+The template deploys `baptistearno/typebot-builder:3.17.2` and `baptistearno/typebot-viewer:3.17.2`, pinned to a specific version rather than `latest`. Postgres and MinIO connections are auto-configured. Login uses GitHub OAuth — the only manual step is creating a free GitHub OAuth App and providing its two credentials.
 
 ## Environment Variables Reference for Typebot on Railway
 
 | Variable | Description | Value |
 |----------|-------------|-------|
+| `GITHUB_CLIENT_ID` | Required for login. From a free GitHub OAuth App (github.com/settings/developers). | User-provided |
+| `GITHUB_CLIENT_SECRET` | Required for login. Paired with the Client ID above. | User-provided |
 | `ENCRYPTION_SECRET` | 32-character secret for data encryption. Do not share. | `${{secret(32)}}` |
 | `NEXTAUTH_SECRET` | Secret key for authentication sessions. Auto-generated. | `${{secret(32)}}` |
 | `NEXTAUTH_URL` | Public URL of the builder service for auth callbacks. | `https://${{RAILWAY_PUBLIC_DOMAIN}}` |
 | `NEXT_PUBLIC_VIEWER_URL` | Public URL of the viewer service for bot embedding. | `https://viewer-domain.railway.app` |
 | `DATABASE_URL` | PostgreSQL connection string (auto-injected from Postgres). | `${{Postgres.DATABASE_URL}}` |
-| `REDIS_URL` | Redis connection string (auto-injected from Redis). | `${{Redis.REDIS_URL}}` |
-| `ADMIN_EMAIL` | Email address for the first admin account. | `admin@example.com` |
+| `S3_ACCESS_KEY` / `S3_SECRET_KEY` / `S3_BUCKET` / `S3_ENDPOINT` | MinIO credentials for media uploads. Auto-wired. | `${{minio.MINIO_ROOT_USER}}` etc. |
 
 ## How does Typebot compare against other chatbot builders
 
@@ -110,11 +111,11 @@ Self-hosting gives full access to all features with no usage limits and complete
 
 ### Monthly cost of self hosting Typebot on Railway
 
-Expect $5-15/month for a single builder and viewer instance depending on bot traffic and conversation volume. This includes PostgreSQL storage and Redis caching. High-traffic instances may cost $20-40/month, still substantially less than Intercom's $99/month minimum.
+Expect $5-15/month for a single builder and viewer instance depending on bot traffic and conversation volume. This includes PostgreSQL and MinIO storage. High-traffic instances may cost $20-40/month, still substantially less than Intercom's $99/month minimum.
 
 ### System Requirements for Hosting Typebot on a VPS
 
-Minimum specs: 2GB RAM, 1 vCPU, 20GB storage for Typebot, Postgres, and Redis. For production use with 100+ daily conversations, allocate 4GB RAM, 2 vCPU, and 50GB storage with backup capacity.
+Minimum specs: 2GB RAM, 1 vCPU, 20GB storage for Typebot, Postgres, and MinIO. For production use with 100+ daily conversations, allocate 4GB RAM, 2 vCPU, and 50GB storage with backup capacity.
 
 ## Frequently Asked Questions (FAQs)
 
