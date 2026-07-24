@@ -102,7 +102,7 @@ sh -c 'mc alias set myminio http://minio.railway.internal:9000 "$MINIO_ROOT_USER
 | `PGPASSWORD` | Auto-set: `${{POSTGRES_PASSWORD}}` | No | Password reference. |
 | `PGDATABASE` | Auto-set: `${{POSTGRES_DB}}` | No | Database name reference. |
 | `POSTGRES_USER` | `postgres` | **Yes** | Superuser username. |
-| `POSTGRES_PASSWORD` | `${{secret(16)}}` | No | Auto-generated superuser password. |
+| `POSTGRES_PASSWORD` | Already prefilled by Railway: `${{secret(32, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")}}` — leave as is | No | Auto-generated superuser password. **Corrected 2026-07-24** — this file previously said `${{secret(16)}}`, which was a guess, not what Railway's managed Postgres plugin actually prefills. Same class of mistake caught once already on the Evolution API template's checklist; this is now confirmed via screenshot to be Railway's standard default for this plugin across multiple templates, not project-specific. |
 | `POSTGRES_DB` | `railway` | **Yes** | Default database name (Railway's own default, not `typebot` — the app doesn't care what it's named). |
 | `SSL_CERT_DAYS` | `820` | **Yes** | SSL certificate validity period. |
 
