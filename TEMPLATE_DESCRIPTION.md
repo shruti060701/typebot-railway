@@ -3,7 +3,7 @@
 **Railway Title:** `Typebot [Updated Jul '26]`
 **Railway Description:** `Typebot [Jul '26] (Visual Chatbot Builder & Conversational AI) Self Host`
 **Spreadsheet Title:** `Typebot (Open-Source Visual Chatbot Builder & Flow Automation Platform)`
-**GitHub Description:** `Typebot — open-source visual chatbot builder. Deploy on Railway with one click.`
+**GitHub Description:** `Typebot: open-source visual chatbot builder. Deploy on Railway with one click.`
 
 ---
 
@@ -15,7 +15,7 @@ Typebot is an open-source chatbot builder that lets you create conversational ex
 
 ## About Hosting Typebot open-source software on Railway (self hosted Typebot template)
 
-Self-hosting Typebot on Railway means your bot flows and customer data stay under your control forever. Railway manages infrastructure complexity—provisioning PostgreSQL and MinIO storage, and networking between builder and viewer—while you focus on designing better conversations. No vendor lock-in, no per-conversation fees.
+Self-hosting Typebot on Railway means your bot flows and customer data stay under your control forever. Railway manages infrastructure complexity, provisioning PostgreSQL and MinIO storage, and networking between builder and viewer, while you focus on designing better conversations. No vendor lock-in, no per-conversation fees.
 
 ## Why Deploy Typebot, the Intercom alternative on Railway (Railway Free Trial)
 
@@ -33,11 +33,11 @@ Railway is a singular platform to deploy your infrastructure stack. Railway will
 
 ## Common Use Cases for hosted Typebot
 
-- **Customer support chatbots** — Handle FAQs, route tickets, and collect user issues 24/7.
-- **Lead generation & qualification** — Qualify prospects with conditional flows before sales handoff.
-- **Feedback collection** — Deploy surveys and feedback bots to improve your product.
-- **Onboarding flows** — Guide new users through setup with interactive conversations.
-- **Sales enablement** — Let prospects explore pricing, features, and plans through chat.
+- **Customer support chatbots**: Handle FAQs, route tickets, and collect user issues 24/7.
+- **Lead generation & qualification**: Qualify prospects with conditional flows before sales handoff.
+- **Feedback collection**: Deploy surveys and feedback bots to improve your product.
+- **Onboarding flows**: Guide new users through setup with interactive conversations.
+- **Sales enablement**: Let prospects explore pricing, features, and plans through chat.
 
 ![Typebot builder screenshot](https://res.cloudinary.com/dm9xq7pqa/image/upload/v1720000001/typebot-builder.png "Typebot visual flow builder")
 
@@ -51,14 +51,14 @@ The Railway template provisions the builder and viewer on port 3000 each, Postgr
 
 ### Implementation Details for Typebot (Using Typebot official docker images)
 
-The template deploys `baptistearno/typebot-builder:3.17.2` and `baptistearno/typebot-viewer:3.17.2`, pinned to a specific version rather than `latest`. Postgres and MinIO connections are auto-configured. Login uses GitHub OAuth — the only manual step is creating a free GitHub OAuth App and providing its two credentials.
+The template deploys `baptistearno/typebot-builder:3.17.2` and `baptistearno/typebot-viewer:3.17.2`, pinned to a specific version rather than `latest`. Postgres and MinIO connections are auto-configured. Login uses GitHub OAuth, the only manual step is creating a free GitHub OAuth App and providing its two credentials.
 
 ## Environment Variables Reference for Typebot on Railway
 
 | Variable | Description | Value |
 |----------|-------------|-------|
-| `GITHUB_CLIENT_ID` | Required for login. From a free GitHub OAuth App (github.com/settings/developers). | User-provided |
-| `GITHUB_CLIENT_SECRET` | Required for login. Paired with the Client ID above. | User-provided |
+| `GITHUB_CLIENT_ID` | Required for login. From a free GitHub OAuth App, use a placeholder URL at first since you won't have your domain yet, update after deploying. | User-provided |
+| `GITHUB_CLIENT_SECRET` | Required for login. Paired with the Client ID; GitHub shows it once. | User-provided |
 | `ENCRYPTION_SECRET` | 32-character secret for data encryption. Do not share. | `${{secret(32)}}` |
 | `NEXTAUTH_SECRET` | Secret key for authentication sessions. Auto-generated. | `${{secret(32)}}` |
 | `NEXTAUTH_URL` | Public URL of the builder service for auth callbacks. | `https://${{RAILWAY_PUBLIC_DOMAIN}}` |
@@ -103,7 +103,7 @@ Run `docker compose up -d` to start all services. Builder will be available afte
 
 ## Official Pricing of Typebot (Typebot pricing)
 
-Typebot is AGPL 3.0 licensed—free to self-host, no licensing fees, per-conversation charges, or feature restrictions. Typebot Cloud offers managed hosting for teams preferring not to manage infrastructure.
+Typebot is AGPL 3.0 licensed, free to self-host, no licensing fees, per-conversation charges, or feature restrictions. Typebot Cloud offers managed hosting for teams preferring not to manage infrastructure.
 
 ## Typebot cloud vs self hosted comparison (Pricing, features, costs, and more)
 
@@ -121,9 +121,6 @@ Minimum specs: 2GB RAM, 1 vCPU, 20GB storage for Typebot, Postgres, and MinIO. F
 
 ### What is Typebot self hosted?
 Typebot self-hosted is the open-source version running on your infrastructure with the same builder, flows, and integrations as cloud without fees or vendor lock-in.
-
-### How much does Typebot self hosting cost on Railway?
-Railway charges for compute, storage, and bandwidth. A typical Typebot setup costs $5-15/month depending on bot traffic and database size.
 
 ### Is Typebot free to use?
 Yes, Typebot is open-source under AGPL 3.0 and free to self-host. You pay only for Railway infrastructure like compute, storage, and bandwidth.
